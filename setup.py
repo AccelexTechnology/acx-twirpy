@@ -1,23 +1,28 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-with open('version.txt') as f:
-    version = f.read().strip()
+with open("README.md") as f:
+    readme = f.read()
 
-with open('README.md', encoding='utf-8') as f:
-      long_description = f.read().strip()
+with open("requirements.txt") as f:
+    install_requires = f.read().splitlines()
 
-setup(name="twirp",
-      version=version,
+
+with open("requirements-dev.txt") as f:
+    tests_require = [
+        line for line in f.read().splitlines() if line != "-r requirements.txt"
+    ]
+
+setup(
+      name="acx-twirpy",
+      version="0.1.dev0",
       description="Twirp server and client lib",
-      long_description=long_description,
+      long_description=readme,
       long_description_content_type='text/markdown',
       license='unlicense',
-      packages=['twirp'],
-      install_requires=[
-            'requests',
-            'structlog',
-            'protobuf'
-      ],
-      test_requires=[
-      ],
-      zip_safe=False)
+      packages=find_packages(where="src"),
+      package_dir={"": "src"},
+      install_requires=install_requires,
+      test_requires=tests_require,
+      python_requires=">=3.8",
+      zip_safe=True
+      )
